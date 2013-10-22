@@ -1,0 +1,21 @@
+[mlekena@cslab04 ~/ToshKernal]$ gcc -Wall -g -o tosh tosh.c
+tosh.c: In function ‘main’:
+tosh.c:12: warning: format ‘%s’ expects type ‘char *’, but argument 2 has type ‘char * (*)[256]’
+tosh.c:13: warning: format ‘%s’ expects type ‘char *’, but argument 2 has type ‘char * (*)[256]’
+tosh.c:14: warning: passing argument 1 of ‘strcmp’ from incompatible pointer type
+/usr/include/string.h:143: note: expected ‘const char *’ but argument is of type ‘char * (*)[256]’
+tosh.c:8: warning: unused variable ‘args’
+[mlekena@cslab04 ~/ToshKernal]$ gcc -Wall -g -o tosh tosh.c
+tosh.c: In function ‘main’:
+tosh.c:12: warning: format ‘%s’ expects type ‘char *’, but argument 2 has type ‘char * (*)[256]’
+tosh.c:13: warning: format ‘%s’ expects type ‘char *’, but argument 2 has type ‘char **’
+tosh.c:14: warning: passing argument 1 of ‘strcmp’ from incompatible pointer type
+/usr/include/string.h:143: note: expected ‘const char *’ but argument is of type ‘char * (*)[256]’
+tosh.c:8: warning: unused variable ‘args’
+[mlekena@cslab04 ~/ToshKernal]$ gcc -Wall -g -o tosh tosh.c
+tosh.c: In function ‘main’:
+tosh.c:12: warning: format ‘%s’ expects type ‘char *’, but argument 2 has type ‘char * (*)[256]’
+tosh.c:14: warning: passing argument 1 of ‘strcmp’ from incompatible pointer type
+/usr/include/string.h:143: note: expected ‘const char *’ but argument is of type ‘char * (*)[256]’
+tosh.c:8: warning: unused variable ‘args’
+************************************************************************************************************************************************************************************************************************************************************************************************
