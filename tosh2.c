@@ -2,6 +2,8 @@
 #include<readline/readline.h>
 #include<string.h>
 #include <unistd.h>
+#include<stdlib.h>
+#include<sys/wait.h>
 
 void stringProcess(char command[1024], char args[30][1024])
 { 
@@ -47,12 +49,11 @@ void stringProcess(char command[1024], char args[30][1024])
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int commandExecutor(char command[1024], char args[30][1024])
 {
-
+  int status = 0;
+  printf("Command is >%s<\n",command);
   //**case cd
   if(strcmp(command, "cd") == 0)
     {
@@ -74,7 +75,29 @@ int commandExecutor(char command[1024], char args[30][1024])
   //defualt bad input
   else
     {
-      printf("Command not found: %s\n", command);
+      int child_id = fork();
+      if (child_id == -1)
+	{
+	  //failed fork
+	  printf("Process not executed. Please terminate some processes and try again.\n");
+	}
+      else if(child_id == 0)
+	{
+	  printf("attempting fork\n");
+	  //forking all day
+	  if(execvp(command, args) <= 0) /////////FIX HERE!!!
+	    {
+	      printf("ERROR could not execvp\n");
+	    }
+	}
+      else
+	{
+	  printf("parent waiting\n");
+	  //this is the parent... wait()
+	  while(wait(&status) != child_id)
+	    ;
+	}
+      printf("Command not found: %s\nChild ID: %d\n", command, child_id);
     }
   return 0;
 }
@@ -98,7 +121,7 @@ int main(void)
       getcwd(path, sizeof(path));
       //initilize the array of strings which holds the users command 
       char args[30][1024];
-      char command[1024];
+      char command[1024] = "";
 
       //prints the tosh prompt
       printf("[%s:tosh]:)",path);
