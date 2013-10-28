@@ -15,23 +15,26 @@ void stringProcess(char *command,  char *args[1024])
   int count = 0;
   int i = 0;
   int newWordCount = 0;
+  
 
   //empties all args so they no longer hold the values of the last user command
   int j = 0;
-  printf("size%lu\n", sizeof args);
-  for(j = 0; j < sizeof args; j++)
+ /*for(j = 0; j < 1024; j++)
     {
-      printf("freeing\n");
+      
       free(args[j]);
-    }
+      }*/
 
   //re alocates memory 
   j = 0;
-  for(j = 0; j < sizeof args; j++)
+  for(j = 0; j < 1024; j++)
     {
+
       args[j] = malloc(sizeof args);
-      memset(args[j],0,sizeof args[j]);
+      memset(args[j],0,sizeof args);
+      
     }
+  // printf("size of args = %lu", sizeof args);
   //memset(args,0,sizeof args);
   //gets new user command
   fgets(input,sizeof input,stdin);
@@ -110,11 +113,11 @@ int commandExecutor(char *command,  char *args[1024])
 	}
       else if(child_id == 0)
 	{
-	  printf("attempting fork\n");
+	  //  printf("attempting fork\n");
 	  //forking all day
-	  printf("command = %s\n", command);
-	  printf("args[0] = %s\n", args[0]);
-	  printf("args[1] = %s\n", args[1]);
+	  // printf("command = %s\n", command);
+	  // printf("args[0] = %s\n", args[0]);
+	  //printf("args[1] = %s\n", args[1]);
 	  if(execvp(command, args) < 0)
 	    {
 	      printf("ERROR could not execvp\n");
@@ -124,7 +127,7 @@ int commandExecutor(char *command,  char *args[1024])
 	}
       else
 	{
-	  printf("parent waiting\n");
+	  //printf("parent waiting\n");
 	  //this is the parent... wait()
 	  while(wait(&status) != child_id)
 	    ;
@@ -173,3 +176,7 @@ int main(void)
     }
   return 0;
 }
+/*
+if & is present store new PID array, and run prog. Thgen during every iteration of the loop
+check the prog array PID status for any terminated progs and waith those that have terminated.
+ */
