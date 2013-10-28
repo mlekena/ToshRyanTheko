@@ -5,52 +5,79 @@
 #include<stdlib.h>
 #include<sys/wait.h>
 
-void stringProcess(char command[1024], char args[30][1024])
+//I think our loops to malloc and free are not going to the end of the array because sizeof doesnt work in this case
+//if you type a space before ls it breaks! 
+
+void stringProcess(char *command,  char *args[1024])
 { 
   char input[1024];
+  char word[1024];
   int count = 0;
   int i = 0;
   int newWordCount = 0;
 
   //empties all args so they no longer hold the values of the last user command
   int j = 0;
+  printf("size%lu\n", sizeof args);
   for(j = 0; j < sizeof args; j++)
     {
-      memset(args[j], 0, sizeof args[j]);
+      printf("freeing\n");
+      free(args[j]);
     }
+
+  //re alocates memory 
+  j = 0;
+  for(j = 0; j < sizeof args; j++)
+    {
+      args[j] = malloc(sizeof args);
+      memset(args[j],0,sizeof args[j]);
+    }
+  //memset(args,0,sizeof args);
   //gets new user command
   fgets(input,sizeof input,stdin);
   //fills args with the command split up into "words"
   char *newLineChar = "\n";
-  for (i = 0; strcmp(&input[i], newLineChar) != 0; i++)
+  for (i = 0; strcmp(&input[i-1], newLineChar) != 0; i++)
     {
-	if (input[i] == ' ')
+	if (input[i] == ' ' || input[i] == '\0' || input[i] == *newLineChar)
 	  {
-	    //sanatise(args[newWordCount])
+	    
+	    word[count] = '\0';
+	    //printf("word = %s\n",word);
+	    //args[newWordCount] = word;
+	    strcpy(args[newWordCount], word);
+	    
 	    count = 0;
+	    
+	    if(newWordCount == 0)
+	      {
+		//*command = *word;
+		strcpy(command, word);
+	      }
+	    if(input[i] == '\n' || input[i] == '\0')
+	      {
+		args[++newWordCount] = NULL;
+		}
 	    newWordCount++;
-	  }
-	else if(newWordCount == 0)
-	  {
-	    command[count] = input[i];
-	    count++;
+	    memset(word,'\0',sizeof word);
 	  }
 	else
 	  {
-	    args[newWordCount-1][count] = input[i];
+	    word[count] = input[i];
 	    count++;
 	  }
       
     }
+  //args[newWordCount+1] = NULL;
 
 
-  //printf("in method: %s\n",args[0]);
+  //printf("method must be <%s> \nIn method: %s\n",command,args[0]);
 }
 
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int commandExecutor(char command[1024], char args[30][1024])
+int commandExecutor(char *command,  char *args[1024])
 {
   int status = 0;
   printf("Command is >%s<\n",command);
@@ -58,10 +85,10 @@ int commandExecutor(char command[1024], char args[30][1024])
   if(strcmp(command, "cd") == 0)
     {
       //code for cd input
-      if (chdir(args[0]) == -1)
+      if (chdir(args[1]) == -1)
 	{
 	  //failed
-	  printf("Directory not found: /%s\n", args[1]);
+	  printf("Directory not found: %s\n", args[1]);
 	}
     }
   //**case pwd
@@ -85,9 +112,14 @@ int commandExecutor(char command[1024], char args[30][1024])
 	{
 	  printf("attempting fork\n");
 	  //forking all day
-	  if(execvp(command, args) <= 0) /////////FIX HERE!!!
+	  printf("command = %s\n", command);
+	  printf("args[0] = %s\n", args[0]);
+	  printf("args[1] = %s\n", args[1]);
+	  if(execvp(command, args) < 0)
 	    {
 	      printf("ERROR could not execvp\n");
+	      printf("Command not found: %s\nChild ID: %d\n", command, child_id);
+	      exit(1);
 	    }
 	}
       else
@@ -97,7 +129,7 @@ int commandExecutor(char command[1024], char args[30][1024])
 	  while(wait(&status) != child_id)
 	    ;
 	}
-      printf("Command not found: %s\nChild ID: %d\n", command, child_id);
+      //
     }
   return 0;
 }
@@ -108,7 +140,6 @@ int commandExecutor(char command[1024], char args[30][1024])
 int main(void) 
 {  
   char path[1024] = "/";
-  
   //lets user know tosh has started
   printf("Starting Tosh...\n");
 
@@ -120,7 +151,7 @@ int main(void)
       //get the current working directory
       getcwd(path, sizeof(path));
       //initilize the array of strings which holds the users command 
-      char args[30][1024];
+      char *args[1024];
       char command[1024] = "";
 
       //prints the tosh prompt
