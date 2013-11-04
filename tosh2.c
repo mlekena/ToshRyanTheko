@@ -62,7 +62,7 @@ void stringProcess(char *command,  char *args[50])
 	    }
 	  if(input[i] == '\n' || input[i] == '\0')
 	    {
-	      args[++newWordCount] = NULL;
+	      args[newWordCount + 1] = NULL;
 	    }
 	  newWordCount++;
 	  memset(word,'\0',sizeof word);
@@ -173,15 +173,14 @@ int commandExecutor(char *command,  char *args[50])
 	}
 
     }
-  if(pipIdx != -1)
+  if(pipeIdx != -1)
     {
 
       int dArr[2];
-      char readbuffer[80];
       int PID = -1;
       pipe(dArr);
 
-      if(PID = fork()< 0 )
+      if((PID = fork())< 0 )
 	{
 	  printf("ERROR: Fork failed");
 	  exit(1);
@@ -189,29 +188,39 @@ int commandExecutor(char *command,  char *args[50])
       else if(PID == 0)
 	{
 	  int PID2 = -1;
-	  if(PID2 = fork() < 0)
+	  if((PID2 = fork()) < 0)
 	    {
 	      printf("ERROR: Fork failed");
 	      exit(1);
 	    }
 	  else if(PID2 == 0)
 	    {
-	      close(1);
+	      close(0);
+	      
+	      dup(dArr[1]);
 
-	      dup(dArr[0]);
+	      printf("about to execvp the youngest\n");
+	      execvp(args[pipeIdx], &args[pipeIdx]);
+	      printf("execvp youngest");
 	    }
 	  //if middle person
 	  else
 	    {
-	      close(0);
-	      dup(dArr[1]);
-	      wait(PID2);
+	      close(1);
+	      dup(dArr[0]);
+	      printf("Waiting for youngest\n");
+	      waitpid(PID2, &status, 0);
+	      printf("finished wiating for youngest\n");
+	      printf("about to execvp the middle\n");
+	      execvp(*args, args);
 	    }
 	}
-      //if your the big mama
+      //if you're the big mama
       else
 	{
-	  wait(PID);
+	  printf("waiting for middle \n");
+	  waitpid(PID, &status, 0);
+	  printf("finished waiting for middle");
 	}
     }
   
