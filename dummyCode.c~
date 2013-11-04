@@ -1,0 +1,10 @@
+
+/* C Program to print a sentence. */
+#include <stdio.h>
+int main()
+{
+   printf("C Programming is working very well over here"); /* printf() prints the content inside quotation */
+
+   double j = 10/0;
+   return 0;
+}
