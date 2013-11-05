@@ -11,7 +11,7 @@
 //I think our loops to malloc and free are not going to the end of the array because sizeof doesnt work in this case
 //if you type a space before ls it breaks! 
 
-void stringProcess(char *command,  char *args[50])
+void stringProcess(char *command,  char *args[50], int *backgrounding)
 { 
   char input[1024];
   char word[1024];
@@ -67,6 +67,11 @@ void stringProcess(char *command,  char *args[50])
 	  newWordCount++;
 	  memset(word,'\0',sizeof word);
 	}
+      else if(input[i] == '&')
+	{
+	  *backgrounding = 1;
+	  continue;
+	}
       else
 	{
 	  word[count] = input[i];
@@ -83,8 +88,10 @@ void stringProcess(char *command,  char *args[50])
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int commandExecutor(char *command,  char *args[50])
+int commandExecutor(char *command,  char *args[50], int *backgrounding)
 {
+  printf("comEx %d\n",*backgrounding);
+  printf("In comEx\n");
   int status = 0;
   //IO REDIRECTION*****************************************************
   int IOIndex = 0;
@@ -154,7 +161,10 @@ int commandExecutor(char *command,  char *args[50])
 	}
       else if (PID != 0)
 	{
-	  wait(&status);
+	  if (*backgrounding == -1)
+	    {
+	      wait(&status);
+	    }
 	  printf("about to return\n");
 	  return 0;
 	}
@@ -162,6 +172,8 @@ int commandExecutor(char *command,  char *args[50])
 
 
   //IOREDIRECTION END*********************************************************************
+ 
+
   //PIPES!!!*****************************************************************************
   int pipeIdx = -1;
   for (IOIndex = 0; args[IOIndex] != NULL; IOIndex++)
@@ -170,16 +182,15 @@ int commandExecutor(char *command,  char *args[50])
 	{
 	  args[IOIndex] = NULL;
 	  pipeIdx = IOIndex + 1; 
-	}
-
+	}      
     }
   if(pipeIdx != -1)
     {
 
       int dArr[2];
       int PID = -1;
+      int PID2 = -1;
       pipe(dArr);
-
       if((PID = fork())< 0 )
 	{
 	  printf("ERROR: Fork failed");
@@ -187,40 +198,48 @@ int commandExecutor(char *command,  char *args[50])
 	}
       else if(PID == 0)
 	{
-	  int PID2 = -1;
 	  if((PID2 = fork()) < 0)
 	    {
 	      printf("ERROR: Fork failed");
 	      exit(1);
 	    }
-	  else if(PID2 == 0)
+	  else if(PID2 == 0)//right arg
 	    {
-	      close(0);
-	      
-	      dup(dArr[1]);
+	      close(dArr[1]);
+	      dup2(dArr[0], STDIN_FILENO);
+	      //close(dArr[0]);
 
-	      printf("about to execvp the youngest\n");
+	      //printf("about to execvp the youngest\n");
 	      execvp(args[pipeIdx], &args[pipeIdx]);
-	      printf("execvp youngest");
+	      //execvp(*args, args);
 	    }
 	  //if middle person
-	  else
+	  else//left arg
 	    {
-	      close(1);
-	      dup(dArr[0]);
-	      printf("Waiting for youngest\n");
-	      waitpid(PID2, &status, 0);
-	      printf("finished wiating for youngest\n");
-	      printf("about to execvp the middle\n");
+	      close(dArr[0]);
+	      dup2(dArr[1], STDOUT_FILENO);
+	      printf("%d\n", STDOUT_FILENO);
+	      //close(dArr[1]);
+
+
+	      //printf("Waiting for youngest\n");
+	      //waitpid(PID2, &status2, 0);
+	      //printf("finished wiating for youngest\n");
+	      //printf("about to execvp the middle\n");
 	      execvp(*args, args);
+	      //execvp(args[pipeIdx], &args[pipeIdx]);
 	    }
 	}
       //if you're the big mama
       else
 	{
-	  printf("waiting for middle \n");
-	  waitpid(PID, &status, 0);
-	  printf("finished waiting for middle");
+	  if (*backgrounding == -1)
+	    {
+	      //printf("waiting for middle \n");
+	      waitpid(PID2, &status, 0);
+	    }
+	  //printf("finished waiting for middle");
+	  return 0;
 	}
     }
   
@@ -229,7 +248,7 @@ int commandExecutor(char *command,  char *args[50])
 
   //PIPES END****************************************************************************
   printf("Command is >%s<\n",command);
-  //**case cd
+    //**case cd
   if(strcmp(command, "cd") == 0)
     {
       //code for cd input
@@ -258,11 +277,7 @@ int commandExecutor(char *command,  char *args[50])
 	}
       else if(child_id == 0)
 	{
-	  //  printf("attempting fork\n");
-	  //forking all day
-	  // printf("command = %s\n", command);
-	  // printf("args[0] = %s\n", args[0]);
-	  //printf("args[1] = %s\n", args[1]);
+
 	  if(execvp(command, args) < 0)
 	    {
 	      printf("ERROR could not execvp\n");
@@ -274,10 +289,13 @@ int commandExecutor(char *command,  char *args[50])
 	{
 	  //printf("parent waiting\n");
 	  //this is the parent... wait()
-	  while(wait(&status) != child_id)
-	    ;
+	  //  while(wait(&status) != child_id)
+	  // ;
+	  if(*backgrounding == -1)
+	    {
+	      wait(&status);
+	    }
 	}
-      //
     }
   return 0;
 }
@@ -301,12 +319,12 @@ int main(void)
       //initilize the array of strings which holds the users command 
       char *args[50];
       char command[1024] = "";
-
+      int backgrounding = -1;
       //prints the tosh prompt
       printf("[%s]tosh$ ",path);
       
       //takes in command from user and puts each word of it into an array
-      stringProcess(command,args);
+      stringProcess(command,args, &backgrounding);
       
       //if user types exit or q the program will stop
       if (strcmp(command,"exit") == 0 || strcmp(args[0],"q\n") == 0)
@@ -316,7 +334,7 @@ int main(void)
 	}
       else
 	{
-	  commandExecutor(command,args);
+	  commandExecutor(command,args,&backgrounding);
 	}
     }
   return 0;
