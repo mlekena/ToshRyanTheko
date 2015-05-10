@@ -1,3 +1,6 @@
+cat
+dog
+bear
 
 /* C Program to print a sentence. */
 #include <stdio.h>
@@ -9,6 +12,5 @@ int main()
 
    fprintf(stderr, "this is an error");
    printf("www.facebook.com");
-   printf("This is a line from the dummycode");
    return 0;
 }

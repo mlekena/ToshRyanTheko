@@ -1,0 +1,303 @@
+Script started on Tue 05 Nov 2013 12:56:37 AM EST
+
+#
+#Here is where we start tosh!!
+#
+[mlekena@cslab11 ~/ToshKernal]$ ./tosh2
+Starting Tosh...
+#
+#Here is where we hit enter without a command
+#
+[/students/home/mlekena/ToshKernal]tosh$
+#
+#Here is where we test ls
+#
+[/students/home/mlekena/ToshKernal]tosh$ ls
+dummyCode    dummyCode.c~      out2.txt	 out.txt    README    README~	 test-output.txt  tosh2.c
+dummyCode.c  IORedirectCode.c  out3.txt	 pipes.txt  #README#  README.md	 tosh2		  tosh2.c~
+#
+#Here is where we test ls -la
+#
+[/students/home/mlekena/ToshKernal]tosh$ ls -la
+total 136
+drwxrwxr-x  3 mlekena mlekena  4096 Nov	 5 00:56 .
+drwx------ 68 mlekena mlekena  4096 Nov	 5 00:40 ..
+-rwxrwxr-x  1 mlekena mlekena  9335 Nov	 3 19:56 dummyCode
+-rw-rw-r--  1 mlekena mlekena	269 Nov	 3 19:50 dummyCode.c
+-rw-rw-r--  1 mlekena mlekena	216 Nov	 3 16:48 dummyCode.c~
+drwxrwxr-x  8 mlekena mlekena  4096 Nov	 5 00:40 .git
+-rw-rw-r--  1 mlekena mlekena  1986 Nov	 3 20:56 IORedirectCode.c
+-rwxrwxr-x  1 mlekena mlekena 14724 Oct 31 22:44 .nfs0000000000680050000000f9
+-rwxrwxr-x  1 mlekena mlekena 15933 Nov	 4 23:28 .nfs00000000006803030000017a
+-rwxrwxr-x  1 mlekena mlekena 14756 Oct 31 22:48 .nfs00000000006803cc000000fa
+-rw-rw-r--  1 mlekena mlekena	  0 Nov	 5 00:53 out2.txt
+-rw-rw-r--  1 mlekena mlekena	  0 Nov	 5 00:53 out3.txt
+-rw-rw-r--  1 mlekena mlekena	 35 Nov	 5 00:41 out.txt
+-rw-rw-r--  1 mlekena mlekena	 13 Nov	 3 22:12 pipes.txt
+-rw-rw-r--  1 mlekena mlekena  2364 Oct 14 17:59 README
+lrwxrwxrwx  1 mlekena mlekena	 48 Nov	 4 23:46 .#README -> mlekena@cslab11.cs.skidmore.edu.14093:1382711862
+-rw-rw-r--  1 mlekena mlekena	139 Nov	 4 23:51 #README#
+-rw-rw-r--  1 mlekena mlekena  1818 Oct 13 19:57 README~
+-rw-rw-r--  1 mlekena mlekena	  0 Oct 22 15:14 README.md
+-rw-rw-r--  1 mlekena mlekena	  0 Nov	 5 00:56 test-output.txt
+-rwxrwxr-x  1 mlekena mlekena 16085 Nov	 5 00:31 tosh2
+-rw-rw-r--  1 mlekena mlekena  8726 Nov	 5 00:31 tosh2.c
+-rw-rw-r--  1 mlekena mlekena  2145 Oct 21 17:39 tosh2.c~
+#
+#Here is where we test ls -al
+#
+[/students/home/mlekena/ToshKernal]tosh$ ls -al
+total 136
+drwxrwxr-x  3 mlekena mlekena  4096 Nov	 5 00:56 .
+drwx------ 68 mlekena mlekena  4096 Nov	 5 00:40 ..
+-rwxrwxr-x  1 mlekena mlekena  9335 Nov	 3 19:56 dummyCode
+-rw-rw-r--  1 mlekena mlekena	269 Nov	 3 19:50 dummyCode.c
+-rw-rw-r--  1 mlekena mlekena	216 Nov	 3 16:48 dummyCode.c~
+drwxrwxr-x  8 mlekena mlekena  4096 Nov	 5 00:40 .git
+-rw-rw-r--  1 mlekena mlekena  1986 Nov	 3 20:56 IORedirectCode.c
+-rwxrwxr-x  1 mlekena mlekena 14724 Oct 31 22:44 .nfs0000000000680050000000f9
+-rwxrwxr-x  1 mlekena mlekena 15933 Nov	 4 23:28 .nfs00000000006803030000017a
+-rwxrwxr-x  1 mlekena mlekena 14756 Oct 31 22:48 .nfs00000000006803cc000000fa
+-rw-rw-r--  1 mlekena mlekena	  0 Nov	 5 00:53 out2.txt
+-rw-rw-r--  1 mlekena mlekena	  0 Nov	 5 00:53 out3.txt
+-rw-rw-r--  1 mlekena mlekena	 35 Nov	 5 00:41 out.txt
+-rw-rw-r--  1 mlekena mlekena	 13 Nov	 3 22:12 pipes.txt
+-rw-rw-r--  1 mlekena mlekena  2364 Oct 14 17:59 README
+lrwxrwxrwx  1 mlekena mlekena	 48 Nov	 4 23:46 .#README -> mlekena@cslab11.cs.skidmore.edu.14093:1382711862
+-rw-rw-r--  1 mlekena mlekena	139 Nov	 4 23:51 #README#
+-rw-rw-r--  1 mlekena mlekena  1818 Oct 13 19:57 README~
+-rw-rw-r--  1 mlekena mlekena	  0 Oct 22 15:14 README.md
+-rw-rw-r--  1 mlekena mlekena	  0 Nov	 5 00:56 test-output.txt
+-rwxrwxr-x  1 mlekena mlekena 16085 Nov	 5 00:31 tosh2
+-rw-rw-r--  1 mlekena mlekena  8726 Nov	 5 00:31 tosh2.c
+-rw-rw-r--  1 mlekena mlekena  2145 Oct 21 17:39 tosh2.c~
+#
+#here is where we test cat
+#
+[/students/home/mlekena/ToshKernal]tosh$ cat pipes.txt
+cat
+dog
+bear
+#
+#here is where we test cd
+#
+[/students/home/mlekena/ToshKernal]tosh$ cd /usr/bin
+#
+#here is where we test ls
+#
+[/usr/bin]tosh$ ls
+[				       mktap
+2to3				       mktexfmt
+411toppm			       mktexlsr
+7za				       mktexmf
+a2p				       mktexpk
+a2ping				       mktextfm
+a52dec				       mkxauth
+aafire				       mlabel
+aainfo				       mllatex
+aasavefont			       mltex
+aatest				       mm2gv
+ab				       mmc-tool
+abrt-action-analyze-backtrace	       mmd
+abrt-action-analyze-c		       mmount
+abrt-action-analyze-core	       mmove
+abrt-action-analyze-oops	       mobj_dump
+abrt-action-analyze-python	       moc-qt4
+abrt-action-generate-backtrace	       modulator
+...
+
+#
+#where is where we test another cd
+#
+[/usr/bin]tosh$ cd ../
+#
+#where is where we test pwd
+#
+[/usr]tosh$ pwd
+/usr
+#
+#here is where we test cd by its self
+#
+[/usr]tosh$ cd
+Directory not found: (null)
+#
+#here is where we make a mistake in a bash command and tosh handles it gracefully 
+#
+[/usr]tosh$ fins..--name yelp
+Command not found: fins
+#
+#here is where we execute find
+#
+[/usr]tosh$ find . -name yelp
+find: `./lost+found': Permission denied
+find: `./lib64/audit': Permission denied
+find: `./lib/sc': Permission denied
+find: `./lib/codecs': Permission denied
+find: `./man': Permission denied
+./bin/yelp
+find: `./local/pl-6.2.6/lib': Permission denied
+find: `./local/pl-6.2.6/include': Permission denied
+find: `./local/pl-6.2.6/packages/jpl/docs/java_api/javadoc': Permission denied
+find: `./local/pl-6.2.6/packages/xpce/lib/x86_64-linux': Permission denied
+find: `./local/pl-6.2.6/packages/xpce/src/pl': Permission denied
+...
+#
+#here is where we start tosh again because the previuos find was taking too long
+#
+[mlekena@cslab11 ~/ToshKernal]$ ./tosh2
+Starting Tosh...
+#
+#here is where we test wc
+#
+[/students/home/mlekena/ToshKernal]tosh$ wc pipes.txt
+ 3  3 13 pipes.txt
+#
+#here is where we test /usr/bin/ps which doesnt work
+#
+[/students/home/mlekena/ToshKernal]tosh$ /usr/bin/ps
+Command not found: /usr/bin/ps
+#
+#here is where we test ps
+#
+[/students/home/mlekena/ToshKernal]tosh$ ps
+  PID TTY	   TIME CMD
+ 6896 pts/3    00:00:00 tcsh
+11310 pts/3    00:00:00 tosh2
+12499 pts/3    00:00:00 ps
+#
+#here is where we run firefox
+#
+[/students/home/mlekena/ToshKernal]tosh$ firefox
+#
+#here is where we exit
+#
+[/students/home/mlekena/ToshKernal]tosh$ exit
+#
+#here is where we start tosh again
+#
+[mlekena@cslab11 ~/ToshKernal]$ ./tosh2
+Starting Tosh...
+#
+#here is where we test pipes and it works!!!!
+#
+[/students/home/mlekena/ToshKernal]tosh$ cat pipes.txt | grep -i dog
+dog
+#
+#here is where we test IORedirection and it works 
+#
+[/students/home/mlekena/ToshKernal]tosh$ cat pipes.txt dummyCode.c 1> out.txt
+#
+#here is where we test IORedirection again and it works like a charm --- if you have made it to here you are a god among men
+#
+[/students/home/mlekena/ToshKernal]tosh$ cat pipes.txt dummyCode.c 1> out.txt 2> out.txt
+#
+#here is where we test the simple command wc
+#
+[/students/home/mlekena/ToshKernal]tosh$ wc out.txt
+ 16  41 282 out.txt
+#
+#here is where we test IORedirection again and it works...wait for it...AGAIN!
+#
+[/students/home/mlekena/ToshKernal]tosh$ cat pipes.txt 1> out.2.txt
+#
+#here we test diff
+#
+[/students/home/mlekena/ToshKernal]tosh$ diff out.txt out2.txt
+1,16d0
+< cat
+< dog
+< bear
+<
+< /* C Program to print a sentence. */
+< #include <stdio.h>
+<
+<
+< int main()
+< {
+<    printf("C Programming is working very well over here"); /* printf() prints the content inside quotation */
+<
+<    fprintf(stderr, "this is an error");
+<    printf("www.facebook.com");
+<    return 0;
+< }
+#
+#here is where we test redirection for stderr
+#
+[/students/home/mlekena/ToshKernal]tosh$ ls -la yeeha.txt 2> errorout.txt
+#
+#here is where we exit
+#
+[/students/home/mlekena/ToshKernal]tosh$ exit
+#
+#here is where we start tosh again
+#
+[mlekena@cslab11 ~/ToshKernal]$ ./tosh2
+Starting Tosh...
+#
+#here is where we try to pipe nothing
+#
+[/students/home/mlekena/ToshKernal]tosh$ |
+#
+#here is where we redirect incorrectly
+#
+[/students/home/mlekena/ToshKernal]tosh$ ls 1 >	 out
+ls: cannot access 1: No such file or directory
+ls: cannot access >: No such file or directory
+ls: cannot access out: No such file or directory
+#
+#here is where we io redirect incorrectly
+#
+[/students/home/mlekena/ToshKernal]tosh$ cat foo11> out
+cat: foo1: No such file or directory
+cat: >: No such file or directory
+cat: out: No such file or directory
+#
+#here is where we io redirect incorrectly 
+#
+[/students/home/mlekena/ToshKernal]tosh$ 1> < 2>
+tosh2: tosh2.c:136: commandExecutor: Assertion `FID>=0' failed.
+#
+#test background 
+#
+[/students/home/mlekena/ToshKernal]tosh$ emacs testCase.txt &
+#
+#test whitespaces
+#
+[/students/home/mlekena/ToshKernal]tosh$    ls	      -i
+#
+#here is where we run into a slight problem but nothing too big
+#
+[/students/home/mlekena/ToshKernal]tosh$ 6816843 <	      6816827 IORedirectCode.c	6816829 README		 6816826 tosh2
+6816844 2>	      6816841 out.2.txt		6816832 #README#	 6816680 tosh2.c
+6816735 dummyCode     6816839 out2.txt		6816799 README~		 6815953 tosh2.c~
+6816769 dummyCode.c   6816830 out3.txt		6816797 README.md
+6816751 dummyCode.c~  6816838 out.txt		6816846 testCase.txt
+6816842 errorout.txt  6816754 pipes.txt		6816840 test-output.txt
+#
+#here is where we start tosh again
+#
+[mlekena@cslab11 ~/ToshKernal]$ ./tosh2
+Starting Tosh...
+#
+#here is where we test whitspace
+#
+[/students/home/mlekena/ToshKernal]tosh$ ls	-i
+6816843 <	      6816827 IORedirectCode.c	6816829 README		 6816826 tosh2
+6816844 2>	      6816841 out.2.txt		6816832 #README#	 6816680 tosh2.c
+6816735 dummyCode     6816839 out2.txt		6816799 README~		 6815953 tosh2.c~
+6816769 dummyCode.c   6816830 out3.txt		6816797 README.md
+6816751 dummyCode.c~  6816838 out.txt		6816846 testCase.txt
+6816842 errorout.txt  6816754 pipes.txt		6816840 test-output.txt
+#
+#here is where we test piping with multiple params and it works
+#
+[/students/home/mlekena/ToshKernal]tosh$ cat pipes.txt | grep -n dog
+3:dog
+#
+#where is where we exit for the final time ---- Professor Porter... If you are reading this you currently have 297 problems and a glitch aint one if you're going to continue reading i feel bad for you son.
+#
+[/students/home/mlekena/ToshKernal]tosh$ exit
+[mlekena@cslab11 ~/ToshKernal]$ exit
+exit
+
+Script done on Tue 05 Nov 2013 01:08:40 AM EST

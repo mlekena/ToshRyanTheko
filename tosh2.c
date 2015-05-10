@@ -18,6 +18,7 @@ void stringProcess(char *command,  char *args[50], int *backgrounding)
   int count = 0;
   int i = 0;
   int newWordCount = 0;
+  *backgrounding = -1;
   
 
   //empties all args so they no longer hold the values of the last user command
@@ -47,25 +48,30 @@ void stringProcess(char *command,  char *args[50], int *backgrounding)
     {
       if (input[i] == ' ' || input[i] == '\0' || input[i] == *newLineChar)
 	{
-	    
+	  
 	  word[count] = '\0';
-	  //printf("word = %s\n",word);
-	  //args[newWordCount] = word;
-	  strcpy(args[newWordCount], word);
-	    
-	  count = 0;
-	    
-	  if(newWordCount == 0)
+	  if(strcmp(word, "") != 0)
 	    {
-	      //*command = *word;
-	      strcpy(command, word);
+	      //printf("word = %s\n",word);
+	      //args[newWordCount] = word;
+	      strcpy(args[newWordCount], word);
+	    
+	      count = 0;
+	    
+	    
+	      if(newWordCount == 0)
+		{
+		  //*command = *word;
+		  strcpy(command, word);
+		}
+	      
+	      newWordCount++;
+	      memset(word,'\0',sizeof word);
 	    }
 	  if(input[i] == '\n' || input[i] == '\0')
 	    {
-	      args[newWordCount + 1] = NULL;
+	      args[newWordCount] = NULL;
 	    }
-	  newWordCount++;
-	  memset(word,'\0',sizeof word);
 	}
       else if(input[i] == '&')
 	{
@@ -90,8 +96,8 @@ void stringProcess(char *command,  char *args[50], int *backgrounding)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int commandExecutor(char *command,  char *args[50], int *backgrounding)
 {
-  printf("comEx %d\n",*backgrounding);
-  printf("In comEx\n");
+  //printf("comEx %d\n",*backgrounding);
+  //printf("In comEx\n");
   int status = 0;
   //IO REDIRECTION*****************************************************
   int IOIndex = 0;
@@ -114,35 +120,35 @@ int commandExecutor(char *command,  char *args[50], int *backgrounding)
 	    }
 	  else if(PID == 0 && strcmp(args[IOIndex],"1>") == 0)
 	    {
-	      printf("im a child\n");
 	      //redirect
 	      int FID = open(args[IOIndex + 1], O_WRONLY | O_CREAT, 0666);
 	      assert(FID>=0);
 	      close(1);
 	      dup(FID);
 	      close(FID);
+	      args[IOIndex] = NULL;
 	      continue;
 	    }
 	  else if(PID == 0 && strcmp(args[IOIndex],"2>") == 0)
 	    {
-	      printf("im a child\n");
 	      //redirect
 	      int FID = open(args[IOIndex + 1], O_WRONLY | O_CREAT, 0666);
 	      assert(FID>=0);
 	      close(2);
 	      dup(FID);
 	      close(FID);
+	      args[IOIndex] = NULL;
 	      continue;
 	    }
 	  else if(PID == 0 && strcmp(args[IOIndex],"<") == 0)
 	    {
-	      printf("im a child\n");
 	      //redirect
 	      int FID = open(args[IOIndex + 1], O_WRONLY | O_CREAT, 0666);
 	      assert(FID>=0);
 	      close(0);
 	      dup(FID);
 	      close(FID);
+	      args[IOIndex] = NULL;
 	      continue;
 	    }
 	}
@@ -165,7 +171,7 @@ int commandExecutor(char *command,  char *args[50], int *backgrounding)
 	    {
 	      wait(&status);
 	    }
-	  printf("about to return\n");
+	  //printf("about to return\n");
 	  return 0;
 	}
     }
@@ -210,7 +216,11 @@ int commandExecutor(char *command,  char *args[50], int *backgrounding)
 	      //close(dArr[0]);
 
 	      //printf("about to execvp the youngest\n");
-	      execvp(args[pipeIdx], &args[pipeIdx]);
+	      if(execvp(args[pipeIdx], &args[pipeIdx]) < 0)
+		{
+		  printf("command not found: %s\n", args[pipeIdx]);
+		  exit(1);
+		}
 	      //execvp(*args, args);
 	    }
 	  //if middle person
@@ -226,7 +236,11 @@ int commandExecutor(char *command,  char *args[50], int *backgrounding)
 	      //waitpid(PID2, &status2, 0);
 	      //printf("finished wiating for youngest\n");
 	      //printf("about to execvp the middle\n");
-	      execvp(*args, args);
+	      if(execvp(*args, args) < 0)
+		{
+		  printf("command not found: %s\n", *args);
+		  exit(1);
+		}
 	      //execvp(args[pipeIdx], &args[pipeIdx]);
 	    }
 	}
@@ -247,7 +261,7 @@ int commandExecutor(char *command,  char *args[50], int *backgrounding)
 
 
   //PIPES END****************************************************************************
-  printf("Command is >%s<\n",command);
+  //printf("Command is >%s<\n",command);
     //**case cd
   if(strcmp(command, "cd") == 0)
     {
@@ -280,8 +294,8 @@ int commandExecutor(char *command,  char *args[50], int *backgrounding)
 
 	  if(execvp(command, args) < 0)
 	    {
-	      printf("ERROR could not execvp\n");
-	      printf("Command not found: %s\nChild ID: %d\n", command, child_id);
+	      //printf("ERROR could not execvp\n");
+	      printf("Command not found: %s\n", command);
 	      exit(1);
 	    }
 	}
@@ -327,11 +341,17 @@ int main(void)
       stringProcess(command,args, &backgrounding);
       
       //if user types exit or q the program will stop
-      if (strcmp(command,"exit") == 0 || strcmp(args[0],"q\n") == 0)
+      if(args[0] == NULL)
+
+	{
+	  continue;
+	}
+      else if (strcmp(command,"exit") == 0 || strcmp(args[0],"q\n") == 0)
 	{
 	  exit = 1;
 	  continue;//leave the rest of the code and exit basically
 	}
+
       else
 	{
 	  commandExecutor(command,args,&backgrounding);
